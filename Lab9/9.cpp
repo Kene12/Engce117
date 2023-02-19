@@ -158,4 +158,94 @@ void FindData( LinkedList *ll ){
 }//end function FindData
 
 ///////////////////////////////////////////////////////////////////////////////
+LinkedList :: LinkedList() {
+  start = NULL;
+  now = &start;
+}//end function LinkedList
+
+LinkedList :: ~LinkedList() {
+	struct studentNode *temp = *now;
+	while (  temp != NULL ) {
+		start = start->next;
+    delete temp;
+    temp = start;
+  }//end while
+}//end function ~LinkedList
+
+void LinkedList :: InsNode(  char n[], int a, char s, float g ) {
+	struct studentNode *newNode = new studentNode;
+	strcpy(  newNode->name, n );
+	newNode->age = a;
+	newNode->sex = s;
+	newNode->gpa = g;
+	newNode->next = *now;
+	*now = newNode;
+}//end function InsNode
+
+void LinkedList :: DelNode() {
+	struct studentNode *temp = *now ;
+	*now = ( *now )->next ;
+	delete temp ;
+	printf( "Delete node succeed" );
+}//end function DelNode
+
+void LinkedList::GoNext() {
+	if(  *now != NULL ){
+ 		*now = ( **now ).next ;
+ 	}//end if
+}//end function GoNext
+
+void LinkedList :: GoFirst() {
+	now = &start;
+}//end function GoFirst
+
+void LinkedList :: GoLast() {
+	GoFirst();
+	while ( *now != NULL ){
+  		*now = ( **now ).next ;
+	}//end while
+}//end function GoLast
+
+struct studentNode *LinkedList::NowNode() {
+	return *now ;
+}//end function NowNode
+
+int LinkedList::FindNode( char n[] ) {
+	int count = 0;
+	GoFirst();
+	while ( *now != NULL ) {
+		if ( strcmp( ( **now ).name, n ) == 0 ){
+   			count++;
+   			*now = NowNode();
+  		}//end if
+		return count;
+		GoNext();
+	}//end while
+ 	return -10;
+}//end function FindNode
+
+void LinkedList::EditNode( char n[], int a, char s, float g ) {
+	int pos = FindNode( n );
+	if ( pos == -10 ) {
+		printf( "Not have node to edit\n" );
+		return;
+	}//end if
+	struct studentNode *temp = NowNode();
+	strcpy( temp->name, n );
+	temp->age = a;
+	temp->sex = s;
+	temp->gpa = g;
+}//end function EditNode
+
+void LinkedList::ShowAll() {
+	GoFirst();
+	while ( *now != NULL ) {
+		printf( "Name: %s\n", ( *now )->name );
+		printf( "Age: %d\n", ( *now )->age );
+		printf( "Sex: %c\n", ( *now )->sex );
+		printf( "GPA: %.2f\n", ( *now )->gpa );
+		printf( "\n" );
+		GoNext();
+	}//end while
+}//end function ShowAll
 
